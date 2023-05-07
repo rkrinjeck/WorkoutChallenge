@@ -1,8 +1,7 @@
+import WorkoutActivity from './components/WorkoutActivity';
 import logo from './carebearPushup.png';
-import DadPic from './Dad.jpg';
-import MomPic from './Mom.jpg';
-import JacobPic from './Jacob.jpg';
-import ConnorPic from './Connor.jpg';
+import RyanPic from './ryanPic.jpeg';
+import SeanPic from './seanPic.PNG';
 import errorLogo from './errorIcon.png';
 import 'primeicons/primeicons.css';
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
@@ -30,7 +29,7 @@ import { Button } from 'primereact/button';
 import { ProgressSpinner } from 'primereact/progressspinner';
 
 const { GoogleSpreadsheet } = require('google-spreadsheet');
-const pushUpDoc = new GoogleSpreadsheet('10PUZ1dZH1EHSaT_-n37ghPj8SnJ_chu5Zq62kCRztws');
+const pushUpDoc = new GoogleSpreadsheet('1z_l7nPvr4vN8ryDXI3Fqs359X6BkVllbdJvBFmghWiE');
 const attendenceOptions = ['No', 'Yes'];
 
 // Data Grid Columns
@@ -38,7 +37,9 @@ const columns = [
   { field: 'Name', header: 'Name' },
   { field: 'Timestamp', header: 'Timestamp' },
   { field: 'Date', header: 'Date' },
-  { field: 'NumOfPushups', header: '# of Pushups' }
+  { field: 'NumOfPullUps', header: '# of Pullups' },
+  { field: 'NumOfPushups', header: '# of Pushups' },
+  { field: 'NumOfSquats', header: '# of Squats' }
 ];
 
 let localData =
@@ -73,15 +74,13 @@ function App() {
   const evaluator = queryParams.get("evaluator");
 
   const [goalCount, setGoalCount] = useState(5000);
-  const [dadCount, setDadCount] = useState(0);
-  const [momCount, setMomCount] = useState(0);
-  const [jacobCount, setJacobCount] = useState(0);
-  const [connorCount, setConnorCount] = useState(0);
+  const [ryanPushupCount, setRyanPushupCount] = useState(0);
+  const [seanPushupCount, setSeanPushupCount] = useState(0);
 
   // Get IP Address from geolocation-db.com
   const getIPAddress = async () => {
-    const res = await axios.get('https://geolocation-db.com/json/');
-    setIP(res.data.IPv4);
+    //const res = await axios.get('https://geolocation-db.com/json/');
+    //setIP(res.data.IPv4);
   }
 
   // Get All Teams / Player Info - Google Sheets
@@ -105,23 +104,6 @@ function App() {
     setTotalData(totalDataSheet);
   };
 
-  // Get Evaluation Google Sheet
-  // const getEvaluationGoogleSheet = async () => {
-  //   setIsLoading(true);
-  //   setLoadingMessage('Validating Evaluator Data');
-
-  //   await evalDoc.useServiceAccountAuth({
-  //     client_email: 'playerevalserviceaccount@player-evaluations-370214.iam.gserviceaccount.com',
-  //     private_key: '-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDkcMhyYBqTLVDn\npzVMB0Fg3ghkmwpXzPlDJ3QUjdk2nTAAgzoAi48LKeo9vy3Ni+C0vilNh8JuN42z\nUI55PcSyzZF4Ft/Z1qrB/BKr4K/Z9s9sk6gIMqFmxD09Q5gE2cgtvp4Oxj+oYYaF\n1T6yTYytPXah3RoELMPx/dmLCaAFbmqIisVcUcrrr7wpYoxKJjtN8YVWs5MpUQR7\nC7aRZqaK8WvXwglT1QXQrBU7wExiqwXm7FkeuGEP/EqCoSKsH+ZUle5vBTiASDsj\nvKUG27MJAPpC/0tMFQ5ZNpqAbRPyhYqbvsmqYtCmM3Q2+GrkjGOpHHukLe2dkAaw\nmpjbGU8fAgMBAAECggEATvUck0vcY5p6KFeG+GxZkJ2t0Pg1rvtN/IQafzA4L8RM\n3yB8X8vc+ULXj9gQgMckN9SyefW+olHZTG0/kXBkGFktOpDNdoHYK4xw96+FmJTS\nRPkUTyEQ4HBbql0+og6UPhtwjjK/tfdfg8qdDQv437gq1O+TGnZOk8nl80S0ZquI\nQPkuFll0VOjCOuZYk8ZimJkoA6VLDrcxuaVS8w8Lo+EFfIyYzvH6DvTmPOGJXYMx\n5EPXU74qD3PXKjWm71HwBC6Ex9ODTrtOg+6HsymLbBEoBb+7ajtiIwizKnbAy2QB\nK8XIcmmpDA1o+vEKp0jiNdhb2fIGZZs/nZZwR9PR4QKBgQD0MmqAjoS5Nuz0mku7\n8iKT++b+cOXgebXkMoPPoD4TrRyrFjwFcwx6we4jR/3IEKC41OpxVAFoMYX30cRh\na2MgT2oLlGNuXRMbHgENM4eDV6po8WZKb4YXq403pD4kUH2etwx6TYEGP2U6JWRg\ni/QCV+/1aVPkomuYEe3Vj51z5QKBgQDve2eRnR6im+KoxxetvMogB/839ZxZFo8k\nQH63+A1rdZRGL3xH09K0AOAnAOrQo3MMqIXdlH8IRBAseAeNQVxETRCpU2sZuC0Q\nevB86LJ0y0eaggQJkGaAE5GJs4WPAQtZyn0w2MReKOQj0s9VEUQN+NutZa9+HPuY\n99ev69POswKBgQDH/ZY9rPrD2VjcxpTp2tc4zSAUGBAb9HHj7v8GhtzwLmGBOJd1\nexCoZLUMTgRo2j1WwoEyyTLRy2VFXZVwl4s6Re+6hg+crjtchQklb6M3DQ/yHGnC\n4m02a3gfLrL5+LW4y387lsfpfvf/U+pOK7BuTuil21oqsF5fz6cxtQmlhQKBgQDG\nZCEEjHkYlLNMxsJi94cqyfUwUpRXaUzj51oS5beYUiuniScYCe7/l8oaBbSBayag\nUeu0CJTEMD6F2FnJN2BMZNtsquKKx/ztLiuUDuHnx49l/FeD5NBFQfDLdqEqOt9A\nX3MeyDTFHHMDCl0gR9FtEcBLAXZEr5Xuv0M7Rc6N6QKBgCnEOrZ5I8hsZst5WL/P\nInHuAuD66JvH6l1dkY2fSAY16+bDeNmZh3lXnUnD9ftU0SMgPLqUlRyV6Nag99N9\n4BZX8s66cEXsdqWshImyKANhA86OYZQn1XaA12Gsp3x+OHRhRIHA5pxBk4ykXn+5\nVYa9oy3VvWpEgHH5SXVGER9h\n-----END PRIVATE KEY-----',
-  //   });
-
-  //   await evalDoc.loadInfo();
-
-  //   setLoadingMessage('Loaded Evaluation Data');
-
-  //   setEvaluationTitle(evalDoc.title);
-  // };
-
   useEffect(() => {
     if (myPushupList.length > 0) {
       // console.log("HERE");
@@ -133,31 +115,21 @@ function App() {
 
   useEffect(() => {
     if (totalData.length > 0) {
-      // console.log("I have total data");
-      // console.log(totalData);
+      //  console.log("I have total data");
+      //  console.log(totalData);
 
-      var dadValues = totalData.filter(player => {
-        return player.Name === "Dad";
+      var ryanValues = totalData.filter(player => {
+        return player.Name === "Ryan";
       });
 
-      var momValues = totalData.filter(player => {
-        return player.Name === "Mom";
-      });
-
-      var jacobValues = totalData.filter(player => {
-        return player.Name === "Jacob";
-      });
-
-      var connorValues = totalData.filter(player => {
-        return player.Name === "Connor";
+      var seanValues = totalData.filter(player => {
+        return player.Name === "Sean";
       });
 
       // console.log(dadValues[0].TotalSum);
-      setDadCount(dadValues[0].TotalSum);
-      setMomCount(momValues[0].TotalSum);
-      setJacobCount(jacobValues[0].TotalSum);
-      setConnorCount(connorValues[0].TotalSum);
-
+      setRyanPushupCount(ryanValues[0].TotalPushupSum);
+      setSeanPushupCount(seanValues[0].TotalPushupSum);
+      
       setIsLoading(false);
     }
 
@@ -165,12 +137,12 @@ function App() {
 
   useEffect(() => {
     //
-  }, [dadCount, momCount, jacobCount, connorCount]);
+  }, [ryanPushupCount, seanPushupCount]);
 
   // Get base data from Google Sheets
   useEffect(() => {
 
-    getIPAddress();
+   // getIPAddress();
 
     // if (!evaluator) {
     //   setShowError(true);
@@ -255,32 +227,18 @@ function App() {
     // localStorage.setItem(evaluator, JSON.stringify(localData));
   }
 
-  function addDadPushupData() {
-    console.log('Adding for Dad');
-    setPushupsPlayer('Dad');
+  function addRyanPushupData() {
+    console.log('Adding for Ryan');
+    setPushupsPlayer('Ryan');
     setVisibleLeft(true);
     // confirmSubmit('Dad');
   }
 
-  function addMomPushupData() {
-    console.log('Adding for Mom');
-    setPushupsPlayer('Mom');
+  function addSeanPushupData() {
+    console.log('Adding for Sean');
+    setPushupsPlayer('Sean');
     setVisibleLeft(true);
     // confirmSubmit('Mom');
-  }
-
-  function addJacobPushupData() {
-    console.log('Adding for Jacob');
-    setPushupsPlayer('Jacob');
-    setVisibleLeft(true);
-    // confirmSubmit('Jacob');
-  }
-
-  function addConnorPushupData() {
-    console.log('Adding for Connor');
-    setPushupsPlayer('Connor');
-    setVisibleLeft(true);
-    // confirmSubmit('Connor');
   }
 
   // Submit form
@@ -314,47 +272,6 @@ function App() {
 
     
     getData();
-
-    //const evalSheet = evalDoc.sheetsByIndex[0];
-
-    // var tempArray = [];
-    // teamPlayerEvalList.forEach(async (el) => {
-
-    //   tempArray.push({
-    //     PlayerId: el.PlayerId,
-    //     FirstName: el.FirstName,
-    //     LastName: el.LastName,
-    //     Team: el.Team,
-    //     Birthdate: el.Birthdate,
-    //     Position: el.Position,
-    //     SkatingAbility: el.SkatingAbility,
-    //     Passing: el.Passing,
-    //     Shooting: el.Shooting,
-    //     PuckControl_StickHandling: el.PuckControl_StickHandling,
-    //     ScoringAbility: el.ScoringAbility,
-    //     PlayMakingAbility: el.PlayMakingAbility,
-    //     PositionalPlay: el.PositionalPlay,
-    //     SupportsPuckCarrier: el.SupportsPuckCarrier,
-    //     TeamPlay: el.TeamPlay,
-    //     Intensity_Agressiveness: el.Intensity_Agressiveness,
-    //     Coachability_Attitude: el.Coachability_Attitude,
-    //     Regular_Attendence: (el.Regular_Attendence == true) ? 'Yes' : 'No',
-    //     Notes: el.Notes,
-    //     Evaluator: evaluatorName,
-    //     EvaluatorIP: ip,
-    //     EvaluationDate: new Date()
-    //   });
-
-    // });
-
-    // // await evalSheet.addRows(tempArray);
-    // submittedTeams.push(selectedTeam);
-    // setSubmittedTeams(submittedTeams);
-    // localStorage.setItem("submittedTeams", JSON.stringify(submittedTeams));
-    // setIsButtonDisabled(true);
-    // setSelectedTeam('');
-    // console.log("Completed");
-    // showSuccess();
   }
 
   const cellEditor = (options) => {
@@ -498,48 +415,32 @@ function App() {
             <div className="flex flex-wrap">
               <div className="flex-auto flex align-items-center justify-content-center bg-blue-500 font-bold text-white m-2 px-5 py-3 border-round" style={{ position: 'relative' }}>
                 <div style={{ textAlign: 'center' }}>
-                  <p>Dad</p>
-                  <img src={DadPic} className="border-solid border-900 border-circle" alt="Dad" width="200px" />
-                  <Knob value={((dadCount / goalCount) * 100).toFixed(1)} textColor="#FFFFFF" valueTemplate={"{value}%"} readOnly />
-                  <p>
-                    {dadCount} / {goalCount}
-                  </p>
+                  <p>Ryan</p>
+                  <img src={RyanPic} className="border-solid border-900 border-circle" alt="Dad" width="200px" />
+
+                  <div className="flex flex-wrap">
+                    <WorkoutActivity activityCount={ryanPushupCount} activityName="Pullups" />
+                    <WorkoutActivity activityCount={ryanPushupCount} activityName="Pushups" />
+                    <WorkoutActivity activityCount={ryanPushupCount} activityName="Squats" />
+                  </div>
+                  
                 </div>
-                <Button icon="pi pi-plus" onClickCapture={addDadPushupData} className="p-button-rounded p-button-warning" style={{ position: 'absolute', top: '4px', right: '4px' }} aria-label="Add for Dad" />
+                <Button icon="pi pi-plus" onClickCapture={addRyanPushupData} className="p-button-rounded p-button-warning" style={{ position: 'absolute', top: '4px', right: '4px' }} aria-label="Add for Ryan" />
               </div>
               <div className="flex-auto flex align-items-center justify-content-center bg-blue-500 font-bold text-white m-2 px-5 py-3 border-round" style={{ position: 'relative' }}>
                 <div style={{ textAlign: 'center' }}>
-                  <p>Mom</p>
-                  <img src={MomPic} className="border-solid border-900 border-circle" alt="Mom" width="200px" />
-                  <Knob value={((momCount / goalCount) * 100).toFixed(1)} textColor="#FFFFFF" valueTemplate={"{value}%"} readOnly />
-                  <p>
-                    {momCount} / {goalCount}
-                  </p>
+                  <p>Sean</p>
+                  <img src={SeanPic} className="border-solid border-900 border-circle" alt="Mom" width="200px" />
+                 
+                  <div className="flex flex-wrap">
+                    <WorkoutActivity activityCount={seanPushupCount} activityName="Pullups" />
+                    <WorkoutActivity activityCount={seanPushupCount} activityName="Pushups" />
+                    <WorkoutActivity activityCount={seanPushupCount} activityName="Squats" />
+                  </div>
                 </div>
-                <Button icon="pi pi-plus" onClickCapture={addMomPushupData} className="p-button-rounded p-button-warning" style={{ position: 'absolute', top: '4px', right: '4px' }} aria-label="Add for Mom" />
+                <Button icon="pi pi-plus" onClickCapture={addSeanPushupData} className="p-button-rounded p-button-warning" style={{ position: 'absolute', top: '4px', right: '4px' }} aria-label="Add for Sean" />
               </div>
-              <div className="flex-auto flex align-items-center justify-content-center bg-blue-500 font-bold text-white m-2 px-5 py-3 border-round" style={{ position: 'relative' }}>
-                <div style={{ textAlign: 'center' }}>
-                  <p>Jacob</p>
-                  <img src={JacobPic} className="border-solid border-900 border-circle" alt="Jacob" width="200px" />
-                  <Knob value={((jacobCount / goalCount) * 100).toFixed(1)} textColor="#FFFFFF" valueTemplate={"{value}%"} readOnly />
-                  <p>
-                    {jacobCount} / {goalCount}
-                  </p>
-                </div>
-                <Button icon="pi pi-plus" onClickCapture={addJacobPushupData} className="p-button-rounded p-button-warning" style={{ position: 'absolute', top: '4px', right: '4px' }} aria-label="Add for Jacob" />
-              </div>
-              <div className="flex-auto flex align-items-center justify-content-center bg-blue-500 font-bold text-white m-2 px-5 py-3 border-round" style={{ position: 'relative' }}>
-                <div style={{ textAlign: 'center' }}>
-                  <p>Connor</p>
-                  <img src={ConnorPic} className="border-solid border-900 border-circle" alt="Connor" width="200px" />
-                  <Knob value={((connorCount / goalCount) * 100).toFixed(1)} textColor="#FFFFFF" valueTemplate={"{value}%"} readOnly />
-                  <p>
-                    {connorCount} / {goalCount}
-                  </p>
-                </div>
-                <Button icon="pi pi-plus" onClickCapture={addConnorPushupData} className="p-button-rounded p-button-warning" style={{ position: 'absolute', top: '4px', right: '4px' }} aria-label="Add for Connor" />
-              </div>
+              
             </div>
           </div>
         </div>
