@@ -1,7 +1,10 @@
 import WorkoutActivity from './components/WorkoutActivity';
 import logo from './carebearPushup.png';
 import RyanPic from './ryanPic.jpeg';
-import SeanPic from './seanPic.PNG';
+import SeanPic from './seanPic.jpg';
+import JeffPic from './jeffPic.jpg';
+import AshleyPic from './ashleyPic.jpg';
+import JessiePic from './jessiePic.jpg';
 import errorLogo from './errorIcon.png';
 import 'primeicons/primeicons.css';
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
@@ -20,6 +23,9 @@ import { InputNumber } from 'primereact/inputnumber';
 import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
 import { Dialog } from 'primereact/dialog';
 import { Sidebar } from 'primereact/sidebar';
+import { Checkbox } from 'primereact/checkbox';
+import { TabView, TabPanel } from 'primereact/tabview';
+
 
 import { Tag } from 'primereact/tag';
 
@@ -68,14 +74,34 @@ function App() {
 
   const [visibleLeft, setVisibleLeft] = useState(false);
   const [pushupsPlayer, setPushupsPlayer] = useState();
-  const [pushupCount, setPushupCount] = useState(10);
+  const [pushupCount, setPushupCount] = useState();
+  const [pullupCount, setPullupCount] = useState();
+  const [squatCount, setSquatCount] = useState();
+  const [shouldAutoCalc, setShouldAutoCalc] = useState(true);
 
   const queryParams = new URLSearchParams(window.location.search)
   const evaluator = queryParams.get("evaluator");
 
   const [goalCount, setGoalCount] = useState(5000);
   const [ryanPushupCount, setRyanPushupCount] = useState(0);
+  const [ryanPullupCount, setRyanPullupCount] = useState(0);
+  const [ryanSquatCount, setRyanSquatCount] = useState(0);
+
   const [seanPushupCount, setSeanPushupCount] = useState(0);
+  const [seanPullupCount, setSeanPullupCount] = useState(0);
+  const [seanSquatCount, setSeanSquatCount] = useState(0);
+
+  const [jeffPushupCount, setJeffPushupCount] = useState(0);
+  const [jeffPullupCount, setJeffPullupCount] = useState(0);
+  const [jeffSquatCount, setJeffSquatCount] = useState(0);
+
+  const [ashleyPushupCount, setAshleyPushupCount] = useState(0);
+  const [ashleyPullupCount, setAshleyPullupCount] = useState(0);
+  const [ashleySquatCount, setAshleySquatCount] = useState(0);
+
+  const [jessiePushupCount, setJessiePushupCount] = useState(0);
+  const [jessiePullupCount, setJessiePullupCount] = useState(0);
+  const [jessieSquatCount, setJessieSquatCount] = useState(0);
 
   // Get IP Address from geolocation-db.com
   const getIPAddress = async () => {
@@ -129,7 +155,7 @@ function App() {
       // console.log(dadValues[0].TotalSum);
       setRyanPushupCount(ryanValues[0].TotalPushupSum);
       setSeanPushupCount(seanValues[0].TotalPushupSum);
-      
+
       setIsLoading(false);
     }
 
@@ -142,7 +168,7 @@ function App() {
   // Get base data from Google Sheets
   useEffect(() => {
 
-   // getIPAddress();
+    // getIPAddress();
 
     // if (!evaluator) {
     //   setShowError(true);
@@ -171,6 +197,20 @@ function App() {
   useEffect(() => {
     // console.log("Show Error: " + showError);
   }, [showError]);
+
+  useEffect(() => {
+
+    if (shouldAutoCalc) {
+      if (pullupCount > 0) {
+        setPushupCount(pullupCount * 2);
+        setSquatCount(pullupCount * 4);
+      } else {
+        setPullupCount(0);
+        setPushupCount(0);
+        setSquatCount(0);
+      }
+    }
+  }, [pullupCount, pushupCount, squatCount]);
 
   // Ensure a positive integer is entered
   const isPositiveInteger = (val) => {
@@ -231,14 +271,12 @@ function App() {
     console.log('Adding for Ryan');
     setPushupsPlayer('Ryan');
     setVisibleLeft(true);
-    // confirmSubmit('Dad');
   }
 
   function addSeanPushupData() {
     console.log('Adding for Sean');
     setPushupsPlayer('Sean');
     setVisibleLeft(true);
-    // confirmSubmit('Mom');
   }
 
   // Submit form
@@ -257,10 +295,12 @@ function App() {
 
     const dataSheet = pushUpDoc.sheetsByIndex[1];
     var entry = {
-      Name: pushupsPlayer, 
+      Name: pushupsPlayer,
       Timestamp: submitDate.toLocaleString(),
       Date: submitDate.toLocaleDateString(),
-      NumOfPushups: pushupCount
+      NumOfPushups: pushupCount,
+      NumOfPullUps: pullupCount,
+      NumOfSquats: squatCount
     };
 
     // console.log(entry);
@@ -269,8 +309,11 @@ function App() {
 
     setPushupsPlayer('');
     setVisibleLeft(false);
+    setPullupCount(0);
+    setPushupCount(0);
+    setSquatCount(0);
 
-    
+
     getData();
   }
 
@@ -340,6 +383,17 @@ function App() {
     // toast.current.show({ severity: 'warn', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
   }
 
+  const onSetPullupCount = () => {
+    if (pullupCount > 0) {
+      setPushupCount(pullupCount * 2);
+      setSquatCount(pullupCount * 4);
+    } else {
+      setPullupCount(0);
+      setPushupCount(0);
+      setSquatCount(0);
+    }
+  }
+
   const showSuccessToast = (summaryString, detailString) => {
     toast.current.show({ severity: 'success', summary: summaryString, detail: detailString, life: 3000 });
   }
@@ -390,9 +444,22 @@ function App() {
 
       <Sidebar visible={visibleLeft} onHide={() => setVisibleLeft(false)}>
         <div style={{ textAlign: 'center' }}>
-          <h3>Add Pushups for {pushupsPlayer}</h3>
+          <p>
+            Should auto calculate pushups and squats from pullups? <Checkbox onChange={e => setShouldAutoCalc(e.checked)} checked={shouldAutoCalc}></Checkbox>
+          </p>
+          <hr />
+
+          <h3>Add Pullups for {pushupsPlayer}</h3>
           How Many?<br />
-          <InputNumber inputId="vertical" value={pushupCount} onValueChange={(e) => setPushupCount(e.value)} showButtons buttonLayout="vertical" style={{ width: '4rem' }}
+          <InputNumber inputId="vertical" value={pullupCount} onValueChange={(e) => setPullupCount(e.value)} showButtons buttonLayout="vertical" style={{ width: '4rem' }}
+            decrementButtonClassName="p-button-secondary" incrementButtonClassName="p-button-secondary" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" />
+
+          <h3>Pushups</h3><br />
+          <InputNumber inputId="vertical" disabled={shouldAutoCalc} value={pushupCount} onValueChange={(e) => setPushupCount(e.value)} showButtons buttonLayout="vertical" style={{ width: '4rem' }}
+            decrementButtonClassName="p-button-secondary" incrementButtonClassName="p-button-secondary" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" />
+
+          <h3>Squats</h3><br />
+          <InputNumber inputId="vertical" disabled={shouldAutoCalc} value={squatCount} onValueChange={(e) => setSquatCount(e.value)} showButtons buttonLayout="vertical" style={{ width: '4rem' }}
             decrementButtonClassName="p-button-secondary" incrementButtonClassName="p-button-secondary" incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" />
           <hr />
           <Button id='btnSubmit' className='p-button-danger' label="Submit" onClick={confirmSubmit} />
@@ -410,49 +477,108 @@ function App() {
 
         <img src={logo} alt="logo" width="300px" style={{ alignSelf: "center" }} />
 
-        <div className="card">
-          <div className="card-container green-container overflow-hidden">
-            <div className="flex flex-wrap">
-              <div className="flex-auto flex align-items-center justify-content-center bg-blue-500 font-bold text-white m-2 px-5 py-3 border-round" style={{ position: 'relative' }}>
-                <div style={{ textAlign: 'center' }}>
-                  <p>Ryan</p>
-                  <img src={RyanPic} className="border-solid border-900 border-circle" alt="Dad" width="200px" />
+        <TabView>
+          <TabPanel header="Men (Big Dumb Animals)">
+            <div className="card">
+              <div className="card-container green-container overflow-hidden">
+                <div className="flex flex-wrap">
+                  <div className="flex-auto flex align-items-center justify-content-center bg-blue-500 font-bold text-white m-2 px-5 py-3 border-round" style={{ position: 'relative' }}>
+                    <div style={{ textAlign: 'center' }}>
+                      <p>Ryan</p>
+                      <img src={RyanPic} className="border-solid border-900 border-circle" alt="Ryan" width="200px" />
 
-                  <div className="flex flex-wrap">
-                    <WorkoutActivity activityCount={ryanPushupCount} activityName="Pullups" />
-                    <WorkoutActivity activityCount={ryanPushupCount} activityName="Pushups" />
-                    <WorkoutActivity activityCount={ryanPushupCount} activityName="Squats" />
+                      <div className="flex flex-wrap">
+                        <WorkoutActivity activityCount={ryanPullupCount} activityName="Pullups" />
+                        <WorkoutActivity activityCount={ryanPushupCount} activityName="Pushups" />
+                        <WorkoutActivity activityCount={ryanSquatCount} activityName="Squats" />
+                      </div>
+
+                    </div>
+                    <Button icon="pi pi-plus" onClickCapture={addRyanPushupData} className="p-button-rounded p-button-warning" style={{ position: 'absolute', top: '4px', right: '4px' }} aria-label="Add for Ryan" />
                   </div>
-                  
-                </div>
-                <Button icon="pi pi-plus" onClickCapture={addRyanPushupData} className="p-button-rounded p-button-warning" style={{ position: 'absolute', top: '4px', right: '4px' }} aria-label="Add for Ryan" />
-              </div>
-              <div className="flex-auto flex align-items-center justify-content-center bg-blue-500 font-bold text-white m-2 px-5 py-3 border-round" style={{ position: 'relative' }}>
-                <div style={{ textAlign: 'center' }}>
-                  <p>Sean</p>
-                  <img src={SeanPic} className="border-solid border-900 border-circle" alt="Mom" width="200px" />
-                 
-                  <div className="flex flex-wrap">
-                    <WorkoutActivity activityCount={seanPushupCount} activityName="Pullups" />
-                    <WorkoutActivity activityCount={seanPushupCount} activityName="Pushups" />
-                    <WorkoutActivity activityCount={seanPushupCount} activityName="Squats" />
+                  <div className="flex-auto flex align-items-center justify-content-center bg-blue-500 font-bold text-white m-2 px-5 py-3 border-round" style={{ position: 'relative' }}>
+                    <div style={{ textAlign: 'center' }}>
+                      <p>Sean</p>
+                      <img src={SeanPic} className="border-solid border-900 border-circle" alt="Sean" width="200px" />
+
+                      <div className="flex flex-wrap">
+                        <WorkoutActivity activityCount={seanPullupCount} activityName="Pullups" />
+                        <WorkoutActivity activityCount={seanPushupCount} activityName="Pushups" />
+                        <WorkoutActivity activityCount={seanSquatCount} activityName="Squats" />
+                      </div>
+                    </div>
+                    <Button icon="pi pi-plus" onClickCapture={addSeanPushupData} className="p-button-rounded p-button-warning" style={{ position: 'absolute', top: '4px', right: '4px' }} aria-label="Add for Sean" />
                   </div>
+
+                  <div className="flex-auto flex align-items-center justify-content-center bg-blue-500 font-bold text-white m-2 px-5 py-3 border-round" style={{ position: 'relative' }}>
+                    <div style={{ textAlign: 'center' }}>
+                      <p>Jeff</p>
+                      <img src={JeffPic} className="border-solid border-900 border-circle" alt="Sean" width="200px" />
+
+                      <div className="flex flex-wrap">
+                        <WorkoutActivity activityCount={jeffPullupCount} activityName="Pullups" />
+                        <WorkoutActivity activityCount={jeffPushupCount} activityName="Pushups" />
+                        <WorkoutActivity activityCount={jeffSquatCount} activityName="Squats" />
+                      </div>
+                    </div>
+                    <Button icon="pi pi-plus" onClickCapture={addSeanPushupData} className="p-button-rounded p-button-warning" style={{ position: 'absolute', top: '4px', right: '4px' }} aria-label="Add for Sean" />
+                  </div>
+
                 </div>
-                <Button icon="pi pi-plus" onClickCapture={addSeanPushupData} className="p-button-rounded p-button-warning" style={{ position: 'absolute', top: '4px', right: '4px' }} aria-label="Add for Sean" />
               </div>
-              
             </div>
-          </div>
-        </div>
+          </TabPanel>
+          <TabPanel header="Boss Ladies">
+            <div className="card">
+              <div className="card-container green-container overflow-hidden">
+                <div className="flex flex-wrap">
+                  <div className="flex-auto flex align-items-center justify-content-center bg-blue-500 font-bold text-white m-2 px-5 py-3 border-round" style={{ position: 'relative' }}>
+                    <div style={{ textAlign: 'center' }}>
+                      <p>Ashley</p>
+                      <img src={AshleyPic} className="border-solid border-900 border-circle" alt="Ryan" width="200px" />
 
-        <DataTable value={myPushupList} editMode="cell" className="editable-cells-table" responsiveLayout="scroll">
+                      <div className="flex flex-wrap">
+                        <WorkoutActivity activityCount={ashleyPullupCount} activityName="Pullups" />
+                        <WorkoutActivity activityCount={ashleyPushupCount} activityName="Pushups" />
+                        <WorkoutActivity activityCount={ashleySquatCount} activityName="Squats" />
+                      </div>
+
+                    </div>
+                    <Button icon="pi pi-plus" onClickCapture={addRyanPushupData} className="p-button-rounded p-button-warning" style={{ position: 'absolute', top: '4px', right: '4px' }} aria-label="Add for Ryan" />
+                  </div>
+                  <div className="flex-auto flex align-items-center justify-content-center bg-blue-500 font-bold text-white m-2 px-5 py-3 border-round" style={{ position: 'relative' }}>
+                    <div style={{ textAlign: 'center' }}>
+                      <p>Jessie</p>
+                      <img src={JessiePic} className="border-solid border-900 border-circle" alt="Sean" width="200px" />
+
+                      <div className="flex flex-wrap">
+                        <WorkoutActivity activityCount={jessiePullupCount} activityName="Pullups" />
+                        <WorkoutActivity activityCount={jessiePushupCount} activityName="Pushups" />
+                        <WorkoutActivity activityCount={jessieSquatCount} activityName="Squats" />
+                      </div>
+                    </div>
+                    <Button icon="pi pi-plus" onClickCapture={addSeanPushupData} className="p-button-rounded p-button-warning" style={{ position: 'absolute', top: '4px', right: '4px' }} aria-label="Add for Sean" />
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </TabPanel>
+          <TabPanel header="Kids">
+            <p className="m-0">
+              If any are brave enough
+            </p>
+          </TabPanel>
+        </TabView>
+
+        {/* <DataTable value={myPushupList} editMode="cell" className="editable-cells-table" responsiveLayout="scroll">
           {
             columns.map(({ field, header }) => {
               return <Column key={field} field={field} header={header} style={{ width: '8%' }} body={(field === 'Notes' && notesBodyTemplate) || (field === 'Regular_Attendence' && regAttendenceBodyTemplate)}
                 editor={(options) => cellEditor(options)} onCellEditComplete={onCellEditComplete} />
             })
           }
-        </DataTable>
+        </DataTable> */}
       </div>
 
       <div className="alert alert-danger" role="alert" style={{ width: '60%', minWidth: '400px', margin: 'auto', padding: '10px' }} hidden={!showError}>
