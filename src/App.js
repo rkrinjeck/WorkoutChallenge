@@ -1,8 +1,10 @@
 import WorkoutActivity from './components/WorkoutActivity';
 import logo from './carebearPushup.png';
+import newLogo from './NewLogo.jpg';
 import RyanPic from './ryanPic.jpeg';
 import SeanPic from './seanPic.jpg';
 import JeffPic from './jeffPic.jpg';
+import EricPic from './ericPic.jpg';
 import AshleyPic from './ashleyPic.jpg';
 import JessiePic from './jessiePic.jpg';
 import errorLogo from './errorIcon.png';
@@ -95,6 +97,10 @@ function App() {
   const [jeffPullupCount, setJeffPullupCount] = useState(0);
   const [jeffSquatCount, setJeffSquatCount] = useState(0);
 
+  const [ericPushupCount, setEricPushupCount] = useState(0);
+  const [ericPullupCount, setEricPullupCount] = useState(0);
+  const [ericSquatCount, setEricSquatCount] = useState(0);
+
   const [ashleyPushupCount, setAshleyPushupCount] = useState(0);
   const [ashleyPullupCount, setAshleyPullupCount] = useState(0);
   const [ashleySquatCount, setAshleySquatCount] = useState(0);
@@ -152,9 +158,46 @@ function App() {
         return player.Name === "Sean";
       });
 
+      var jeffValues = totalData.filter(player => {
+        return player.Name === "Jeff";
+      });
+
+      var ericValues = totalData.filter(player => {
+        return player.Name === "Eric";
+      });
+
+      var ashleyValues = totalData.filter(player => {
+        return player.Name === "Ashley";
+      });
+
+      var jessieValues = totalData.filter(player => {
+        return player.Name === "Jessie";
+      });
+
       // console.log(dadValues[0].TotalSum);
       setRyanPushupCount(ryanValues[0].TotalPushupSum);
+      setRyanPullupCount(ryanValues[0].TotalPullupSum);
+      setRyanSquatCount(ryanValues[0].TotalSquatSum);
+
       setSeanPushupCount(seanValues[0].TotalPushupSum);
+      setSeanPullupCount(seanValues[0].TotalPullupSum);
+      setSeanSquatCount(seanValues[0].TotalSquatSum);
+
+      setJeffPushupCount(jeffValues[0].TotalPushupSum);
+      setJeffPullupCount(jeffValues[0].TotalPullupSum);
+      setJeffSquatCount(jeffValues[0].TotalSquatSum);
+
+      setEricPushupCount(ericValues[0].TotalPushupSum);
+      setEricPullupCount(ericValues[0].TotalPullupSum);
+      setEricSquatCount(ericValues[0].TotalSquatSum);
+
+      setAshleyPushupCount(ashleyValues[0].TotalPushupSum);
+      setAshleyPullupCount(ashleyValues[0].TotalPullupSum);
+      setAshleySquatCount(ashleyValues[0].TotalSquatSum);
+
+      setJessiePushupCount(jessieValues[0].TotalPushupSum);
+      setJessiePullupCount(jessieValues[0].TotalPullupSum);
+      setJessieSquatCount(jessieValues[0].TotalSquatSum);
 
       setIsLoading(false);
     }
@@ -267,15 +310,39 @@ function App() {
     // localStorage.setItem(evaluator, JSON.stringify(localData));
   }
 
-  function addRyanPushupData() {
+  function addRyanData() {
     console.log('Adding for Ryan');
     setPushupsPlayer('Ryan');
     setVisibleLeft(true);
   }
 
-  function addSeanPushupData() {
+  function addSeanData() {
     console.log('Adding for Sean');
     setPushupsPlayer('Sean');
+    setVisibleLeft(true);
+  }
+
+  function addJeffData() {
+    console.log('Adding for Jeff');
+    setPushupsPlayer('Jeff');
+    setVisibleLeft(true);
+  }
+
+  function addEricData() {
+    console.log('Adding for Eric');
+    setPushupsPlayer('Eric');
+    setVisibleLeft(true);
+  }
+
+  function addAshleyData() {
+    console.log('Adding for Ashley');
+    setPushupsPlayer('Ashley');
+    setVisibleLeft(true);
+  }
+
+  function addJessieData() {
+    console.log('Adding for Jessie');
+    setPushupsPlayer('Jessie');
     setVisibleLeft(true);
   }
 
@@ -444,9 +511,9 @@ function App() {
 
       <Sidebar visible={visibleLeft} onHide={() => setVisibleLeft(false)}>
         <div style={{ textAlign: 'center' }}>
-          <p>
-            Should auto calculate pushups and squats from pullups? <Checkbox onChange={e => setShouldAutoCalc(e.checked)} checked={shouldAutoCalc}></Checkbox>
-          </p>
+
+          Should auto calculate pushups and squats from pullups? <Checkbox onChange={e => setShouldAutoCalc(e.checked)} checked={shouldAutoCalc}></Checkbox>
+
           <hr />
 
           <h3>Add Pullups for {pushupsPlayer}</h3>
@@ -475,7 +542,7 @@ function App() {
 
       <div className="card" hidden={showError} style={{ backgroundColor: "#F2F2F3" }}>
 
-        <img src={logo} alt="logo" width="300px" style={{ alignSelf: "center" }} />
+        <img src={newLogo} alt="logo" width="600px" style={{ alignSelf: "center" }} />
 
         <TabView>
           <TabPanel header="Men (Big Dumb Animals)">
@@ -494,7 +561,7 @@ function App() {
                       </div>
 
                     </div>
-                    <Button icon="pi pi-plus" onClickCapture={addRyanPushupData} className="p-button-rounded p-button-warning" style={{ position: 'absolute', top: '4px', right: '4px' }} aria-label="Add for Ryan" />
+                    <Button icon="pi pi-plus" onClickCapture={addRyanData} className="p-button-rounded p-button-warning" style={{ position: 'absolute', top: '4px', right: '4px' }} aria-label="Add for Ryan" />
                   </div>
                   <div className="flex-auto flex align-items-center justify-content-center bg-blue-500 font-bold text-white m-2 px-5 py-3 border-round" style={{ position: 'relative' }}>
                     <div style={{ textAlign: 'center' }}>
@@ -507,13 +574,13 @@ function App() {
                         <WorkoutActivity activityCount={seanSquatCount} activityName="Squats" />
                       </div>
                     </div>
-                    <Button icon="pi pi-plus" onClickCapture={addSeanPushupData} className="p-button-rounded p-button-warning" style={{ position: 'absolute', top: '4px', right: '4px' }} aria-label="Add for Sean" />
+                    <Button icon="pi pi-plus" onClickCapture={addSeanData} className="p-button-rounded p-button-warning" style={{ position: 'absolute', top: '4px', right: '4px' }} aria-label="Add for Sean" />
                   </div>
 
                   <div className="flex-auto flex align-items-center justify-content-center bg-blue-500 font-bold text-white m-2 px-5 py-3 border-round" style={{ position: 'relative' }}>
                     <div style={{ textAlign: 'center' }}>
                       <p>Jeff</p>
-                      <img src={JeffPic} className="border-solid border-900 border-circle" alt="Sean" width="200px" />
+                      <img src={JeffPic} className="border-solid border-900 border-circle" alt="Jeff" width="200px" />
 
                       <div className="flex flex-wrap">
                         <WorkoutActivity activityCount={jeffPullupCount} activityName="Pullups" />
@@ -521,7 +588,21 @@ function App() {
                         <WorkoutActivity activityCount={jeffSquatCount} activityName="Squats" />
                       </div>
                     </div>
-                    <Button icon="pi pi-plus" onClickCapture={addSeanPushupData} className="p-button-rounded p-button-warning" style={{ position: 'absolute', top: '4px', right: '4px' }} aria-label="Add for Sean" />
+                    <Button icon="pi pi-plus" onClickCapture={addJeffData} className="p-button-rounded p-button-warning" style={{ position: 'absolute', top: '4px', right: '4px' }} aria-label="Add for Sean" />
+                  </div>
+
+                  <div className="flex-auto flex align-items-center justify-content-center bg-blue-500 font-bold text-white m-2 px-5 py-3 border-round" style={{ position: 'relative' }}>
+                    <div style={{ textAlign: 'center' }}>
+                      <p>Eric</p>
+                      <img src={EricPic} className="border-solid border-900 border-circle" alt="Eric" width="200px" />
+
+                      <div className="flex flex-wrap">
+                        <WorkoutActivity activityCount={ericPullupCount} activityName="Pullups" />
+                        <WorkoutActivity activityCount={ericPushupCount} activityName="Pushups" />
+                        <WorkoutActivity activityCount={ericSquatCount} activityName="Squats" />
+                      </div>
+                    </div>
+                    <Button icon="pi pi-plus" onClickCapture={addEricData} className="p-button-rounded p-button-warning" style={{ position: 'absolute', top: '4px', right: '4px' }} aria-label="Add for Sean" />
                   </div>
 
                 </div>
@@ -544,7 +625,7 @@ function App() {
                       </div>
 
                     </div>
-                    <Button icon="pi pi-plus" onClickCapture={addRyanPushupData} className="p-button-rounded p-button-warning" style={{ position: 'absolute', top: '4px', right: '4px' }} aria-label="Add for Ryan" />
+                    <Button icon="pi pi-plus" onClickCapture={addAshleyData} className="p-button-rounded p-button-warning" style={{ position: 'absolute', top: '4px', right: '4px' }} aria-label="Add for Ryan" />
                   </div>
                   <div className="flex-auto flex align-items-center justify-content-center bg-blue-500 font-bold text-white m-2 px-5 py-3 border-round" style={{ position: 'relative' }}>
                     <div style={{ textAlign: 'center' }}>
@@ -557,7 +638,7 @@ function App() {
                         <WorkoutActivity activityCount={jessieSquatCount} activityName="Squats" />
                       </div>
                     </div>
-                    <Button icon="pi pi-plus" onClickCapture={addSeanPushupData} className="p-button-rounded p-button-warning" style={{ position: 'absolute', top: '4px', right: '4px' }} aria-label="Add for Sean" />
+                    <Button icon="pi pi-plus" onClickCapture={addJessieData} className="p-button-rounded p-button-warning" style={{ position: 'absolute', top: '4px', right: '4px' }} aria-label="Add for Sean" />
                   </div>
 
                 </div>
