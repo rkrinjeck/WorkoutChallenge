@@ -19,9 +19,6 @@ jobs:
         with:
           submodules: true
           lfs: false
-
-      - name:  Disable  CI  
-      - run:  echo  "CI=false" >> $GITHUB_ENV
           
       - name: Build And Deploy
         id: builddeploy
