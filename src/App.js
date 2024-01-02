@@ -663,7 +663,7 @@ function App() {
                   <div className="flex-auto flex align-items-center justify-content-center bg-blue-500 font-bold text-white m-2 px-5 py-3 border-round" style={{ position: 'relative' }}>
                     <div style={{ textAlign: 'center' }}>
                       <p>Nora</p>
-                      <img src={JessiePic} className="border-solid border-900 border-circle" alt="Sean" width="200px" />
+                      <img src={NoraPic} className="border-solid border-900 border-circle" alt="Sean" width="200px" />
 
                       <div className="flex flex-wrap">
                         <WorkoutActivity activityCount={noraPullupCount} activityName="Pullups" />
