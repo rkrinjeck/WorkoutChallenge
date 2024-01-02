@@ -7,6 +7,7 @@ import JeffPic from './jeffPic.jpg';
 import EricPic from './ericPic.jpg';
 import AshleyPic from './ashleyPic.jpg';
 import JessiePic from './jessiePic.jpg';
+import NoraPic from './noraPic.jpg';
 import errorLogo from './errorIcon.png';
 import 'primeicons/primeicons.css';
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
@@ -109,6 +110,10 @@ function App() {
   const [jessiePullupCount, setJessiePullupCount] = useState(0);
   const [jessieSquatCount, setJessieSquatCount] = useState(0);
 
+  const [noraPushupCount, setNoraPushupCount] = useState(0);
+  const [noraPullupCount, setNoraPullupCount] = useState(0);
+  const [noraSquatCount, setNoraSquatCount] = useState(0);
+
   // Get IP Address from geolocation-db.com
   const getIPAddress = async () => {
     //const res = await axios.get('https://geolocation-db.com/json/');
@@ -174,6 +179,10 @@ function App() {
         return player.Name === "Jessie";
       });
 
+      var noraValues = totalData.filter(player => {
+        return player.Name === "Nora";
+      });
+
       // console.log(dadValues[0].TotalSum);
       setRyanPushupCount(ryanValues[0].TotalPushupSum);
       setRyanPullupCount(ryanValues[0].TotalPullupSum);
@@ -199,6 +208,10 @@ function App() {
       setJessiePullupCount(jessieValues[0].TotalPullupSum);
       setJessieSquatCount(jessieValues[0].TotalSquatSum);
 
+      setNoraPushupCount(noraValues[0].TotalPushupSum);
+      setNoraPullupCount(noraValues[0].TotalPullupSum);
+      setNoraSquatCount(noraValues[0].TotalSquatSum);
+
       setIsLoading(false);
     }
 
@@ -222,7 +235,7 @@ function App() {
 
     setEvaluatorFromParam(true);
 
-    setLoadingMessage('Loading Pushup Data');
+    setLoadingMessage('Loading Workout Data');
 
     getData();
     //getEvaluationGoogleSheet();
@@ -343,6 +356,12 @@ function App() {
   function addJessieData() {
     console.log('Adding for Jessie');
     setPushupsPlayer('Jessie');
+    setVisibleLeft(true);
+  }
+
+  function addNoraData() {
+    console.log('Adding for Nora');
+    setPushupsPlayer('Nora');
     setVisibleLeft(true);
   }
 
@@ -639,6 +658,20 @@ function App() {
                       </div>
                     </div>
                     <Button icon="pi pi-plus" onClickCapture={addJessieData} className="p-button-rounded p-button-warning" style={{ position: 'absolute', top: '4px', right: '4px' }} aria-label="Add for Sean" />
+                  </div>
+
+                  <div className="flex-auto flex align-items-center justify-content-center bg-blue-500 font-bold text-white m-2 px-5 py-3 border-round" style={{ position: 'relative' }}>
+                    <div style={{ textAlign: 'center' }}>
+                      <p>Nora</p>
+                      <img src={JessiePic} className="border-solid border-900 border-circle" alt="Sean" width="200px" />
+
+                      <div className="flex flex-wrap">
+                        <WorkoutActivity activityCount={noraPullupCount} activityName="Pullups" />
+                        <WorkoutActivity activityCount={noraPushupCount} activityName="Pushups" />
+                        <WorkoutActivity activityCount={noraSquatCount} activityName="Squats" />
+                      </div>
+                    </div>
+                    <Button icon="pi pi-plus" onClickCapture={addNoraData} className="p-button-rounded p-button-warning" style={{ position: 'absolute', top: '4px', right: '4px' }} aria-label="Add for Sean" />
                   </div>
 
                 </div>
