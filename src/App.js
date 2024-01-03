@@ -8,6 +8,11 @@ import EricPic from './ericPic.jpg';
 import AshleyPic from './ashleyPic.jpg';
 import JessiePic from './jessiePic.jpg';
 import NoraPic from './noraPic.jpg';
+import SamPic from './samPic.jpg';
+import JacobPic from './jacobPic.jpg';
+import WyattPic from './wyattPic.jpg';
+import MavenPic from './mavenPic.jpg';
+import ConnorPic from './connorPic.jpg';
 import errorLogo from './errorIcon.png';
 import 'primeicons/primeicons.css';
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
@@ -114,6 +119,32 @@ function App() {
   const [noraPullupCount, setNoraPullupCount] = useState(0);
   const [noraSquatCount, setNoraSquatCount] = useState(0);
 
+  // kids
+  // sam
+  const [samPushupCount, setSamPushupCount] = useState(0);
+  const [samPullupCount, setSamPullupCount] = useState(0);
+  const [samSquatCount, setSamSquatCount] = useState(0);
+
+  // jacob
+  const [jacobPushupCount, setJacobPushupCount] = useState(0);
+  const [jacobPullupCount, setJacobPullupCount] = useState(0);
+  const [jacobSquatCount, setJacobSquatCount] = useState(0);
+
+  // wyatt
+  const [wyattPushupCount, setWyattPushupCount] = useState(0);
+  const [wyattPullupCount, setWyattPullupCount] = useState(0);
+  const [wyattSquatCount, setWyattSquatCount] = useState(0);
+
+  // maven
+  const [mavenPushupCount, setMavenPushupCount] = useState(0);
+  const [mavenPullupCount, setMavenPullupCount] = useState(0);
+  const [mavenSquatCount, setMavenSquatCount] = useState(0);
+
+  // connor
+  const [connorPushupCount, setConnorPushupCount] = useState(0);
+  const [connorPullupCount, setConnorPullupCount] = useState(0);
+  const [connorSquatCount, setConnorSquatCount] = useState(0);
+
   // Get IP Address from geolocation-db.com
   const getIPAddress = async () => {
     //const res = await axios.get('https://geolocation-db.com/json/');
@@ -123,7 +154,7 @@ function App() {
   // Get All Teams / Player Info - Google Sheets
   const getData = async () => {
     setIsLoading(true);
-    setLoadingMessage('Validating Evaluator Data');
+    setLoadingMessage('Starting up');
 
     await pushUpDoc.useServiceAccountAuth({
       client_email: 'krinjeckplaygroundsa@krinjeckplayground.iam.gserviceaccount.com',
@@ -134,7 +165,7 @@ function App() {
 
     // console.log(pushUpDoc);
 
-    setLoadingMessage('Loaded Pushup Data');
+    setLoadingMessage('Loaded Workout Data');
 
     let [allPushUpSheet, totalDataSheet] = await Promise.all([pushUpDoc.sheetsByIndex[1].getRows(), pushUpDoc.sheetsByIndex[2].getRows()]);
     setMyPushupList(allPushUpSheet);
@@ -183,6 +214,27 @@ function App() {
         return player.Name === "Nora";
       });
 
+      // kids
+      var samValues = totalData.filter(player => {
+        return player.Name === "Sam";
+      });
+
+      var wyattValues = totalData.filter(player => {
+        return player.Name === "Wyatt";
+      });
+
+      var jacobValues = totalData.filter(player => {
+        return player.Name === "Jacob";
+      });
+
+      var mavenValues = totalData.filter(player => {
+        return player.Name === "Maven";
+      });
+
+      var connorValues = totalData.filter(player => {
+        return player.Name === "Connor";
+      });
+
       // console.log(dadValues[0].TotalSum);
       setRyanPushupCount(ryanValues[0].TotalPushupSum);
       setRyanPullupCount(ryanValues[0].TotalPullupSum);
@@ -212,6 +264,32 @@ function App() {
       setNoraPullupCount(noraValues[0].TotalPullupSum);
       setNoraSquatCount(noraValues[0].TotalSquatSum);
 
+      // kids
+      // sam
+      setSamPushupCount(samValues[0].TotalPushupSum);
+      setSamPullupCount(samValues[0].TotalPullupSum);
+      setSamSquatCount(samValues[0].TotalSquatSum);
+
+      // wyatt
+      setWyattPushupCount(wyattValues[0].TotalPushupSum);
+      setWyattPullupCount(wyattValues[0].TotalPullupSum);
+      setWyattSquatCount(wyattValues[0].TotalSquatSum);
+
+      // jacob
+      setJacobPushupCount(jacobValues[0].TotalPushupSum);
+      setJacobPullupCount(jacobValues[0].TotalPullupSum);
+      setJacobSquatCount(jacobValues[0].TotalSquatSum);
+
+      // maven
+      setMavenPushupCount(mavenValues[0].TotalPushupSum);
+      setMavenPullupCount(mavenValues[0].TotalPullupSum);
+      setMavenSquatCount(mavenValues[0].TotalSquatSum);
+
+      // connor
+      setConnorPushupCount(connorValues[0].TotalPushupSum);
+      setConnorPullupCount(connorValues[0].TotalPullupSum);
+      setConnorSquatCount(connorValues[0].TotalSquatSum);
+
       setIsLoading(false);
     }
 
@@ -219,7 +297,7 @@ function App() {
 
   useEffect(() => {
     //
-  }, [ryanPushupCount, seanPushupCount]);
+  }, [ryanPushupCount, seanPushupCount, jeffPushupCount, ericPushupCount, jessiePushupCount, ashleyPushupCount, noraPushupCount, samPushupCount, wyattPushupCount, jacobPushupCount, mavenPushupCount, connorPushupCount]);
 
   // Get base data from Google Sheets
   useEffect(() => {
@@ -365,6 +443,43 @@ function App() {
     setVisibleLeft(true);
   }
 
+  // kids
+
+  // sam
+  function addSamData() {
+    console.log('Adding for Sam');
+    setPushupsPlayer('Sam');
+    setVisibleLeft(true);
+  }
+
+  // wyatt
+  function addWyattData() {
+    console.log('Adding for Wyatt');
+    setPushupsPlayer('Wyatt');
+    setVisibleLeft(true);
+  }
+
+  // jacob
+  function addJacobData() {
+    console.log('Adding for Jacob');
+    setPushupsPlayer('Jacob');
+    setVisibleLeft(true);
+  }
+
+  // maven
+  function addMavenData() {
+    console.log('Adding for Maven');
+    setPushupsPlayer('Maven');
+    setVisibleLeft(true);
+  }
+
+  // connor
+  function addConnorData() {
+    console.log('Adding for Connor');
+    setPushupsPlayer('Connor');
+    setVisibleLeft(true);
+  }
+
   // Submit form
   async function handleSubmitClick() {
     console.log('submitting')
@@ -392,13 +507,11 @@ function App() {
     // console.log(entry);
     await dataSheet.addRow(entry);
 
-
     setPushupsPlayer('');
     setVisibleLeft(false);
     setPullupCount(0);
     setPushupCount(0);
     setSquatCount(0);
-
 
     getData();
   }
@@ -679,9 +792,82 @@ function App() {
             </div>
           </TabPanel>
           <TabPanel header="Kids">
-            <p className="m-0">
-              If any are brave enough
-            </p>
+          <div className="card">
+              <div className="card-container green-container overflow-hidden">
+                <div className="flex flex-wrap">
+                  <div className="flex-auto flex align-items-center justify-content-center bg-blue-500 font-bold text-white m-2 px-5 py-3 border-round" style={{ position: 'relative' }}>
+                    <div style={{ textAlign: 'center' }}>
+                      <p>Sam</p>
+                      <img src={SamPic} className="border-solid border-900 border-circle" alt="Ryan" width="200px" />
+
+                      <div className="flex flex-wrap">
+                        <WorkoutActivity activityCount={samPullupCount} activityName="Pullups" />
+                        <WorkoutActivity activityCount={samPushupCount} activityName="Pushups" />
+                        <WorkoutActivity activityCount={samSquatCount} activityName="Squats" />
+                      </div>
+
+                    </div>
+                    <Button icon="pi pi-plus" onClickCapture={addSamData} className="p-button-rounded p-button-warning" style={{ position: 'absolute', top: '4px', right: '4px' }} aria-label="Add for Ryan" />
+                  </div>
+                  <div className="flex-auto flex align-items-center justify-content-center bg-blue-500 font-bold text-white m-2 px-5 py-3 border-round" style={{ position: 'relative' }}>
+                    <div style={{ textAlign: 'center' }}>
+                      <p>Wyatt</p>
+                      <img src={WyattPic} className="border-solid border-900 border-circle" alt="Sean" width="200px" />
+
+                      <div className="flex flex-wrap">
+                        <WorkoutActivity activityCount={wyattPullupCount} activityName="Pullups" />
+                        <WorkoutActivity activityCount={wyattPushupCount} activityName="Pushups" />
+                        <WorkoutActivity activityCount={wyattSquatCount} activityName="Squats" />
+                      </div>
+                    </div>
+                    <Button icon="pi pi-plus" onClickCapture={addWyattData} className="p-button-rounded p-button-warning" style={{ position: 'absolute', top: '4px', right: '4px' }} aria-label="Add for Sean" />
+                  </div>
+
+                  <div className="flex-auto flex align-items-center justify-content-center bg-blue-500 font-bold text-white m-2 px-5 py-3 border-round" style={{ position: 'relative' }}>
+                    <div style={{ textAlign: 'center' }}>
+                      <p>Jacob</p>
+                      <img src={JacobPic} className="border-solid border-900 border-circle" alt="Sean" width="200px" />
+
+                      <div className="flex flex-wrap">
+                        <WorkoutActivity activityCount={jacobPullupCount} activityName="Pullups" />
+                        <WorkoutActivity activityCount={jacobPushupCount} activityName="Pushups" />
+                        <WorkoutActivity activityCount={jacobSquatCount} activityName="Squats" />
+                      </div>
+                    </div>
+                    <Button icon="pi pi-plus" onClickCapture={addJacobData} className="p-button-rounded p-button-warning" style={{ position: 'absolute', top: '4px', right: '4px' }} aria-label="Add for Sean" />
+                  </div>
+
+                  <div className="flex-auto flex align-items-center justify-content-center bg-blue-500 font-bold text-white m-2 px-5 py-3 border-round" style={{ position: 'relative' }}>
+                    <div style={{ textAlign: 'center' }}>
+                      <p>Maven</p>
+                      <img src={MavenPic} className="border-solid border-900 border-circle" alt="Sean" width="200px" />
+
+                      <div className="flex flex-wrap">
+                        <WorkoutActivity activityCount={mavenPullupCount} activityName="Pullups" />
+                        <WorkoutActivity activityCount={mavenPushupCount} activityName="Pushups" />
+                        <WorkoutActivity activityCount={mavenSquatCount} activityName="Squats" />
+                      </div>
+                    </div>
+                    <Button icon="pi pi-plus" onClickCapture={addMavenData} className="p-button-rounded p-button-warning" style={{ position: 'absolute', top: '4px', right: '4px' }} aria-label="Add for Sean" />
+                  </div>
+
+                  <div className="flex-auto flex align-items-center justify-content-center bg-blue-500 font-bold text-white m-2 px-5 py-3 border-round" style={{ position: 'relative' }}>
+                    <div style={{ textAlign: 'center' }}>
+                      <p>Connor</p>
+                      <img src={ConnorPic} className="border-solid border-900 border-circle" alt="Sean" width="200px" />
+
+                      <div className="flex flex-wrap">
+                        <WorkoutActivity activityCount={connorPullupCount} activityName="Pullups" />
+                        <WorkoutActivity activityCount={connorPushupCount} activityName="Pushups" />
+                        <WorkoutActivity activityCount={connorSquatCount} activityName="Squats" />
+                      </div>
+                    </div>
+                    <Button icon="pi pi-plus" onClickCapture={addConnorData} className="p-button-rounded p-button-warning" style={{ position: 'absolute', top: '4px', right: '4px' }} aria-label="Add for Sean" />
+                  </div>
+
+                </div>
+              </div>
+            </div>
           </TabPanel>
         </TabView>
 
