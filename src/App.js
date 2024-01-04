@@ -21,6 +21,7 @@ import 'primereact/resources/primereact.css';
 import { Toast } from 'primereact/toast';
 import axios from 'axios'
 import { Knob } from 'primereact/knob';
+import { isMobile } from 'react-device-detect';
 
 import './App.css';
 import { useState, useEffect, useRef } from 'react';
@@ -663,7 +664,7 @@ function App() {
         </div>
       </nav>
 
-      <Sidebar visible={visibleLeft} onHide={() => setVisibleLeft(false)}>
+      <Sidebar visible={visibleLeft} position={isMobile ? 'top' : 'left'} fullScreen={isMobile} onHide={() => setVisibleLeft(false)}>
         <div style={{ textAlign: 'center' }}>
 
           Should auto calculate pushups and squats from pullups? <Checkbox onChange={e => setShouldAutoCalc(e.checked)} checked={shouldAutoCalc}></Checkbox>
@@ -696,7 +697,7 @@ function App() {
 
       <div className="card" hidden={showError} style={{ backgroundColor: "#F2F2F3" }}>
 
-        <img src={newLogo} alt="logo" width="600px" style={{ alignSelf: "center" }} />
+        <img src={newLogo} alt="logo" style={{ alignSelf: "center", width: "100%", maxWidth: "600px" }} />
 
         <TabView>
           <TabPanel header="Men (Big Dumb Animals)">
@@ -814,7 +815,7 @@ function App() {
             </div>
           </TabPanel>
           <TabPanel header="Kids">
-          <div className="card">
+            <div className="card">
               <div className="card-container green-container overflow-hidden">
                 <div className="flex flex-wrap">
                   <div className="flex-auto flex align-items-center justify-content-center bg-blue-500 font-bold text-white m-2 px-5 py-3 border-round" style={{ position: 'relative' }}>
