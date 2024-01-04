@@ -12,6 +12,7 @@ import SamPic from './samPic.jpg';
 import JacobPic from './jacobPic.jpg';
 import WyattPic from './wyattPic.jpg';
 import MavenPic from './mavenPic.jpg';
+import ReaganPic from './reaganPic.jpg';
 import ConnorPic from './connorPic.jpg';
 import errorLogo from './errorIcon.png';
 import 'primeicons/primeicons.css';
@@ -140,6 +141,11 @@ function App() {
   const [mavenPullupCount, setMavenPullupCount] = useState(0);
   const [mavenSquatCount, setMavenSquatCount] = useState(0);
 
+  // reagan
+  const [reaganPushupCount, setReaganPushupCount] = useState(0);
+  const [reaganPullupCount, setReaganPullupCount] = useState(0);
+  const [reaganSquatCount, setReaganSquatCount] = useState(0);
+
   // connor
   const [connorPushupCount, setConnorPushupCount] = useState(0);
   const [connorPullupCount, setConnorPullupCount] = useState(0);
@@ -231,6 +237,10 @@ function App() {
         return player.Name === "Maven";
       });
 
+      var reaganValues = totalData.filter(player => {
+        return player.Name === "Reagan";
+      });
+
       var connorValues = totalData.filter(player => {
         return player.Name === "Connor";
       });
@@ -285,6 +295,11 @@ function App() {
       setMavenPullupCount(mavenValues[0].TotalPullupSum);
       setMavenSquatCount(mavenValues[0].TotalSquatSum);
 
+      // reagan
+      setReaganPushupCount(reaganValues[0].TotalPushupSum);
+      setReaganPullupCount(reaganValues[0].TotalPullupSum);
+      setReaganSquatCount(reaganValues[0].TotalSquatSum);
+
       // connor
       setConnorPushupCount(connorValues[0].TotalPushupSum);
       setConnorPullupCount(connorValues[0].TotalPullupSum);
@@ -297,7 +312,7 @@ function App() {
 
   useEffect(() => {
     //
-  }, [ryanPushupCount, seanPushupCount, jeffPushupCount, ericPushupCount, jessiePushupCount, ashleyPushupCount, noraPushupCount, samPushupCount, wyattPushupCount, jacobPushupCount, mavenPushupCount, connorPushupCount]);
+  }, [ryanPushupCount, seanPushupCount, jeffPushupCount, ericPushupCount, jessiePushupCount, ashleyPushupCount, noraPushupCount, samPushupCount, wyattPushupCount, jacobPushupCount, mavenPushupCount, reaganPushupCount, connorPushupCount]);
 
   // Get base data from Google Sheets
   useEffect(() => {
@@ -470,6 +485,13 @@ function App() {
   function addMavenData() {
     console.log('Adding for Maven');
     setPushupsPlayer('Maven');
+    setVisibleLeft(true);
+  }
+
+  // reagan
+  function addReaganData() {
+    console.log('Adding for Reagan');
+    setPushupsPlayer('Reagan');
     setVisibleLeft(true);
   }
 
@@ -849,6 +871,20 @@ function App() {
                       </div>
                     </div>
                     <Button icon="pi pi-plus" onClickCapture={addMavenData} className="p-button-rounded p-button-warning" style={{ position: 'absolute', top: '4px', right: '4px' }} aria-label="Add for Sean" />
+                  </div>
+
+                  <div className="flex-auto flex align-items-center justify-content-center bg-blue-500 font-bold text-white m-2 px-5 py-3 border-round" style={{ position: 'relative' }}>
+                    <div style={{ textAlign: 'center' }}>
+                      <p>Reagan</p>
+                      <img src={ReaganPic} className="border-solid border-900 border-circle" alt="Sean" width="200px" />
+
+                      <div className="flex flex-wrap">
+                        <WorkoutActivity activityCount={reaganPullupCount} activityName="Pullups" />
+                        <WorkoutActivity activityCount={reaganPushupCount} activityName="Pushups" />
+                        <WorkoutActivity activityCount={reaganSquatCount} activityName="Squats" />
+                      </div>
+                    </div>
+                    <Button icon="pi pi-plus" onClickCapture={addReaganData} className="p-button-rounded p-button-warning" style={{ position: 'absolute', top: '4px', right: '4px' }} aria-label="Add for Sean" />
                   </div>
 
                   <div className="flex-auto flex align-items-center justify-content-center bg-blue-500 font-bold text-white m-2 px-5 py-3 border-round" style={{ position: 'relative' }}>
